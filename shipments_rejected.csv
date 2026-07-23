@@ -1,0 +1,6 @@
+shipment_id,carrier,status,origin,destination,delay_days,cost_usd,rejection_reasons
+SH003,BLUEDART,in_transit,Pune,Hyderabad,,320.0,Invalid delay_days
+,DHL,in_transit,Mumbai,Delhi,1.0,90.0,Missing shipment_id
+SH005,FEDEX,unknown_status,Chennai,Mumbai,3.0,75.0,Invalid status
+SH007,,in_transit,Bangalore,Chennai,2.0,,"Invalid carrier, Invalid cost_usd"
+SH008,BLUEDART,in_transit,Hyderabad,Pune,-1.0,155.0,Negative delay_days
