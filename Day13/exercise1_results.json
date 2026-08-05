@@ -1,0 +1,102 @@
+[
+    {
+        "style": "Zero Shot",
+        "note": "Pump 4 vibration levels remain within normal range after service.",
+        "output": "LOW"
+    },
+    {
+        "style": "Zero Shot",
+        "note": "Conveyor belt 12 motor overheating, smoke smell reported, line stopped.",
+        "output": "HIGH"
+    },
+    {
+        "style": "Zero Shot",
+        "note": "Compressor unit 7 pressure gauge reading slightly inconsistent, monitoring.",
+        "output": "LOW"
+    },
+    {
+        "style": "Zero Shot",
+        "note": "Emergency shutoff valve on Tank 3 failed to engage during test.",
+        "output": "HIGH"
+    },
+    {
+        "style": "Zero Shot",
+        "note": "Routine filter replacement completed on HVAC unit 2, no issues found.",
+        "output": "LOW"
+    },
+    {
+        "style": "Role Prompting",
+        "note": "Pump 4 vibration levels remain within normal range after service.",
+        "output": "LOW"
+    },
+    {
+        "style": "Role Prompting",
+        "note": "Conveyor belt 12 motor overheating, smoke smell reported, line stopped.",
+        "output": "HIGH"
+    },
+    {
+        "style": "Role Prompting",
+        "note": "Compressor unit 7 pressure gauge reading slightly inconsistent, monitoring.",
+        "output": "MEDIUM"
+    },
+    {
+        "style": "Role Prompting",
+        "note": "Emergency shutoff valve on Tank 3 failed to engage during test.",
+        "output": "HIGH"
+    },
+    {
+        "style": "Role Prompting",
+        "note": "Routine filter replacement completed on HVAC unit 2, no issues found.",
+        "output": "LOW"
+    },
+    {
+        "style": "Few Shot",
+        "note": "Pump 4 vibration levels remain within normal range after service.",
+        "output": "LOW"
+    },
+    {
+        "style": "Few Shot",
+        "note": "Conveyor belt 12 motor overheating, smoke smell reported, line stopped.",
+        "output": "HIGH"
+    },
+    {
+        "style": "Few Shot",
+        "note": "Compressor unit 7 pressure gauge reading slightly inconsistent, monitoring.",
+        "output": "**Urgency: LOW**\n\n**Reasoning:** This note describes a minor inconsistency that is already being monitored, with no indication of an active failure, leak, or safety risk (unlike the boiler example, which involved active steam leakage requiring immediate attention). Routine monitoring of a slight gauge variance suggests a precautionary, non-urgent maintenance status."
+    },
+    {
+        "style": "Few Shot",
+        "note": "Emergency shutoff valve on Tank 3 failed to engage during test.",
+        "output": "**HIGH**\n\nAn emergency shutoff valve failing during testing represents a critical safety failure. This affects the site's ability to respond to an actual emergency (like a leak, overpressure, or fire) on Tank 3. This should be treated as a high-priority repair, and Tank 3 should likely be flagged for restricted use or additional monitoring until the valve is repaired and re-tested successfully."
+    },
+    {
+        "style": "Few Shot",
+        "note": "Routine filter replacement completed on HVAC unit 2, no issues found.",
+        "output": "**LOW**\n\nThe note describes a routine, completed maintenance task with no issues identified — this is standard preventive maintenance and requires no immediate action."
+    },
+    {
+        "style": "Chain of Thought",
+        "note": "Pump 4 vibration levels remain within normal range after service.",
+        "output": "# Analysis of Maintenance Note\n\n## 1. Identify the Equipment\n**Pump 4** — recently serviced, vibration levels now being monitored/reported post-maintenance.\n\n## 2. Determine Whether There Is a Safety Risk\n- Vibration levels are described as \"within normal range.\"\n- No abnormal readings, leaks, noise, or overheating mentioned.\n- **No safety risk identified** — this is a normal post-service confirmation.\n\n## 3. Determine Whether Production Is Affected\n- No indication of reduced output, downtime, or performance issues.\n- Pump is operating normally after"
+    },
+    {
+        "style": "Chain of Thought",
+        "note": "Conveyor belt 12 motor overheating, smoke smell reported, line stopped.",
+        "output": "# Analysis\n\n**1. Equipment Identification:**\nConveyor belt 12 motor (drive motor for material handling system)\n\n**2. Safety Risk Assessment:**\nYES — significant safety risk present:\n- \"Smoke smell\" indicates possible electrical fault, insulation breakdown, or motor winding failure\n- Overheating + smoke = potential fire hazard\n- Risk of electrical arcing or component combustion\n- Possible toxic fume exposure to nearby personnel\n\n**3. Production Impact:**\nYES — direct impact confirmed:\n- Line has already stopped (explicitly st"
+    },
+    {
+        "style": "Chain of Thought",
+        "note": "Compressor unit 7 pressure gauge reading slightly inconsistent, monitoring.",
+        "output": "No text response returned."
+    },
+    {
+        "style": "Chain of Thought",
+        "note": "Emergency shutoff valve on Tank 3 failed to engage during test.",
+        "output": "No text response returned."
+    },
+    {
+        "style": "Chain of Thought",
+        "note": "Routine filter replacement completed on HVAC unit 2, no issues found.",
+        "output": "# Analysis\n\n**1. Equipment Identification:**\nHVAC Unit 2 — building climate control/ventilation system.\n\n**2. Safety Risk Assessment:**\nNone identified. The note explicitly states \"no issues found,\" and filter replacement is a standard, non-hazardous maintenance task.\n\n**3. Production Impact:**\nNo impact. This is routine, preventive maintenance performed as scheduled — not a reactive repair. The unit is presumably functioning normally post-service.\n\n**4. Immediate Action Needed:**\nNo. The task is already complet"
+    }
+]

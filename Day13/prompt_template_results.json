@@ -1,0 +1,44 @@
+{
+    "executive_summary_generator": [
+        {
+            "input": {
+                "dashboard_metrics": "On-time shipment rate: 91%. Average delivery delay: 1.8 days. Warehouse utilization: 88%. Damaged goods rate: 2.1%. Fleet fuel cost: $142,000."
+            },
+            "output": "Overall, operations are running well, with 91% of shipments arriving on time and warehouses operating near full capacity at 88% utilization. The biggest risk is warehouse space getting too tight, which combined with a 2.1% damaged goods rate could lead to more errors, delays, and rising fuel costs if left unaddressed. We recommend reviewing warehouse capacity plans now and tightening handling procedures to reduce damage before these small issues grow into bigger delivery problems."
+        },
+        {
+            "input": {
+                "dashboard_metrics": "Order fulfillment: 98%. Inventory accuracy: 97%. Late deliveries: 2%. Customer satisfaction: 95%."
+            },
+            "output": "Operational performance is strong, with 98% order fulfillment, 97% inventory accuracy, and 95% customer satisfaction all pointing to a well-run operation. The biggest risk lies in the 2% late deliveries, which, if left unaddressed, could slowly erode customer trust and satisfaction over time. We recommend investigating the root causes of late deliveries now, while performance is strong, to prevent small delays from becoming a larger problem."
+        }
+    ],
+    "work_order_priority_classifier": [
+        {
+            "input": {
+                "work_order_text": "Forklift hydraulic leak, minor, no production impact."
+            },
+            "output": "```json\n{\n    \"priority\": \"LOW\",\n    \"reason\": \"Minor hydraulic leak with no impact on production does not require immediate action.\",\n    \"recommended_action\": \"Schedule a routine maintenance check to repair the leak and monitor for any changes.\"\n}\n```"
+        },
+        {
+            "input": {
+                "work_order_text": "Emergency stop button on Line 3 is unresponsive during safety inspection."
+            },
+            "output": "```json\n{\n    \"priority\": \"CRITICAL\",\n    \"reason\": \"A non-functional emergency stop button poses an immediate safety hazard and risk of injury to personnel operating Line 3.\",\n    \"recommended_action\": \"Immediately shut down Line 3 and dispatch a technician to repair or replace the emergency stop button before resuming operations.\"\n}\n```"
+        }
+    ],
+    "shipment_delay_risk_analyzer": [
+        {
+            "input": {
+                "shipment_details": "Shipment SH001 delayed by 3 days because of severe weather."
+            },
+            "output": "```json\n{\n    \"risk_level\": \"MEDIUM\",\n    \"reason\": \"A 3-day delay caused by severe weather indicates a moderate disruption that could impact downstream schedules.\",\n    \"recommended_action\": \"Monitor weather updates closely and proactively notify affected customers of potential further delays.\"\n}\n```"
+        },
+        {
+            "input": {
+                "shipment_details": "Shipment SH002 delivered on time without any issues."
+            },
+            "output": "```json\n{\n    \"risk_level\": \"LOW\",\n    \"reason\": \"Shipment SH002 was delivered on time without any reported issues.\",\n    \"recommended_action\": \"Continue standard monitoring procedures for future shipments.\"\n}\n```"
+        }
+    ]
+}

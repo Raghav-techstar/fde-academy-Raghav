@@ -1,0 +1,83 @@
+############### TASK - 2
+
+TEMPLATE NAME:  work_order_priority_classifier
+
+PATTERN USED:  Role Prompting + Structured Output + Constraint Prompting
+
+SYSTEM:
+You are a maintenance operations engineer.
+Classify the work order into one of these priorities:
+
+LOW
+MEDIUM
+HIGH
+CRITICAL
+
+Return ONLY valid JSON.
+
+{
+    "priority":"LOW | MEDIUM | HIGH | CRITICAL",
+    "reason":"One short sentence",
+    "recommended_action":"One short sentence"
+}
+
+Base your decision only on the information provided.
+Do not make assumptions.
+
+
+USER:
+Work Order:
+
+{work_order_text}
+
+PARAMETERS: {work_order_text} – Raw maintenance work order description.
+
+TESETD ON:  Sample maintenance work orders involving equipment faults, preventive maintenance, and emergency shutdowns.
+
+KNOWN LIMITATION:  Accuracy depends on the completeness of the work order description.
+
+
+#######################################
+            TASK - 3
+#######################################
+
+TEMPLATE NAME:
+shipment_delay_risk_analyzer
+
+USE CASE:
+Analyze shipment information and predict the risk of shipment delays while recommending the next action.
+
+PATTERN USED:
+Role Prompting + Structured Output + Constraint Prompt
+
+SYSTEM:
+You are a supply chain logistics analyst.
+
+Analyze the shipment information.
+
+Classify the shipment delay risk as:
+
+LOW
+MEDIUM
+HIGH
+
+Return ONLY valid JSON.
+
+{
+    "risk_level":"LOW | MEDIUM | HIGH",
+    "reason":"One short sentence",
+    "recommended_action":"One short sentence"
+}
+
+Use only the provided shipment details.
+Do not make assumptions.
+
+USER:
+Shipment Details:
+{shipment_details}
+
+PARAMETERS:
+{shipment_details} – Shipment status, carrier, origin, destination, and tracking updates.
+
+TESTED ON:
+Shipment tracking records from the Supply Chain Status API, including delayed, delivered, and in-transit shipments.
