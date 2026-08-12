@@ -1,0 +1,3 @@
+My chosen decision: Use FastAPI BackgroundTasks for the analytics refresh endpoint.
+
+Which day/ exercise it comes from: Day 16 — FastAPI service.

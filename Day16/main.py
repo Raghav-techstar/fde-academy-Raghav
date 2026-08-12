@@ -16,8 +16,15 @@ from fastapi import FastAPI, HTTPException, Depends, BackgroundTasks, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from pydantic import BaseModel, Field
 
-app = FastAPI(title="TechStar Shipment Analytics API", version="1.0.0")
-
+app = FastAPI(
+    title="TechStar Shipment Analytics API",
+    description=(
+        "REST API for managing shipment records and providing shipment "
+        "analytics for an operations dashboard. The service also supports "
+        "background analytics refresh and OAuth2 bearer-token authentication."
+    ),
+    version="1.0.0",
+)
 # ---------------------------------------------------------------------------
 # Provided: in-memory dataset (stand-in for Day 12's PostgreSQL table)
 # ---------------------------------------------------------------------------
@@ -53,8 +60,17 @@ class Token(BaseModel):
     token_type: str
 
 
-@app.post("/token", response_model=Token)
+@app.post(
+    "/token",
+    response_model=Token,
+    summary="Authenticate and obtain an access token",
+)
 def login(form_data: OAuth2PasswordRequestForm = Depends()):
+    """
+    Authenticate the operations user and issue a JWT bearer token.
+
+    Returns an access token when valid credentials are provided.
+    """
     if form_data.username != DEMO_USER["username"] or form_data.password != DEMO_USER["password"]:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -119,8 +135,21 @@ def get_pagination(skip: int = 0, limit: int = 10):
 
 
 # ENDPOINT 1 (provided): list shipments with pagination and optional filter
-@app.get("/shipments", response_model=list[ShipmentResponse])
-def list_shipments(carrier: str | None = None, pagination=Depends(get_pagination)):
+@app.get(
+    "/shipments",
+    response_model=list[ShipmentResponse],
+    summary="List shipments",
+)
+def list_shipments(
+    carrier: str | None = None,
+    pagination=Depends(get_pagination),
+):
+    """
+    Retrieve shipment records with optional carrier filtering and pagination.
+
+    - **carrier**: Optional carrier name used to filter the results.
+    - Returns a list of matching shipment records.
+    """
     results = shipments_db
     if carrier:
         results = [s for s in results if s["carrier"] == carrier]
@@ -128,8 +157,18 @@ def list_shipments(carrier: str | None = None, pagination=Depends(get_pagination
 
 
 # ENDPOINT 2: GET /shipments/{shipment_id}
-@app.get("/shipments/{shipment_id}", response_model=ShipmentResponse)
+@app.get(
+    "/shipments/{shipment_id}",
+    response_model=ShipmentResponse,
+    summary="Retrieve a single shipment",
+)
 def get_shipment(shipment_id: int):
+    """
+    Retrieve a shipment using its unique shipment ID.
+
+    - **shipment_id**: Unique ID of the shipment to retrieve.
+    - Returns the shipment if found, otherwise returns a 404 error.
+    """
     for shipment in shipments_db:
         if shipment["id"] == shipment_id:
             return shipment
@@ -137,9 +176,25 @@ def get_shipment(shipment_id: int):
 
 
 # ENDPOINT 3: POST /shipments (protected — creates data)
-@app.post("/shipments", response_model=ShipmentResponse, status_code=201)
-def create_shipment(shipment: ShipmentCreate, current_user: str = Depends(get_current_user)):
+@app.post(
+    "/shipments",
+    response_model=ShipmentResponse,
+    status_code=201,
+    summary="Create a shipment",
+)
+def create_shipment(
+    shipment: ShipmentCreate,
+    current_user: str = Depends(get_current_user),
+):
+    """
+    Create a new shipment after validating the supplied shipment details.
+
+    - **shipment**: Shipment information including carrier, date, and freight cost.
+    - Returns the newly created shipment with its generated ID.
+    - Requires a valid bearer token.
+    """
     global next_id
+
     new_shipment = {
         "id": next_id,
         "carrier": shipment.carrier,
@@ -147,14 +202,26 @@ def create_shipment(shipment: ShipmentCreate, current_user: str = Depends(get_cu
         "freight_cost": shipment.freight_cost,
         "status": "pending",
     }
+
     shipments_db.append(new_shipment)
     next_id += 1
+
     return new_shipment
 
 
 # ENDPOINT 4: GET /analytics/summary
-@app.get("/analytics/summary", response_model=AnalyticsSummary)
+@app.get(
+    "/analytics/summary",
+    response_model=AnalyticsSummary,
+    summary="Get shipment analytics summary",
+)
 def get_analytics_summary():
+    """
+    Return aggregated analytics for the current shipment dataset.
+
+    Returns the total number of shipments, average freight cost,
+    and shipment counts grouped by status.
+    """
     total = len(shipments_db)
     average_cost = sum(s["freight_cost"] for s in shipments_db) / total if total else 0.0
 
@@ -170,8 +237,23 @@ def get_analytics_summary():
 
 
 # ENDPOINT 5: DELETE /shipments/{shipment_id} (protected — deletes data)
-@app.delete("/shipments/{shipment_id}", status_code=204)
-def delete_shipment(shipment_id: int, current_user: str = Depends(get_current_user)):
+@app.delete(
+    "/shipments/{shipment_id}",
+    status_code=204,
+    summary="Delete a shipment",
+)
+def delete_shipment(
+    shipment_id: int,
+    current_user: str = Depends(get_current_user),
+):
+    """
+    Delete an existing shipment using its unique shipment ID.
+
+    - **shipment_id**: Unique ID of the shipment to delete.
+    - Returns 204 when the shipment is deleted.
+    - Returns 404 if the shipment does not exist.
+    - Requires a valid bearer token.
+    """
     for i, shipment in enumerate(shipments_db):
         if shipment["id"] == shipment_id:
             shipments_db.pop(i)
@@ -231,12 +313,34 @@ def refresh_analytics():
 # ---------------------------------------------------------------------------
 # Task 2: wire the background task endpoint
 # ---------------------------------------------------------------------------
-@app.post("/analytics/refresh", status_code=202)
-def trigger_refresh(background_tasks: BackgroundTasks, current_user: str = Depends(get_current_user)):
+@app.post(
+    "/analytics/refresh",
+    status_code=202,
+    summary="Start analytics refresh",
+)
+def trigger_refresh(
+    background_tasks: BackgroundTasks,
+    current_user: str = Depends(get_current_user),
+):
+    """
+    Start the analytics refresh as a background task.
+
+    Returns immediately with HTTP 202 while the refresh continues
+    asynchronously in the background.
+    """
     background_tasks.add_task(refresh_analytics)
     return {"message": "Analytics refresh started in the background"}
 
 
-@app.get("/analytics/refresh-status")
+@app.get(
+    "/analytics/refresh-status",
+    summary="Check analytics refresh status",
+)
 def get_refresh_status():
+    """
+    Return the current status of the analytics refresh operation.
+
+    The response shows the current refresh state and the timestamp
+    of the most recent completed refresh.
+    """
     return refresh_status
